@@ -2,7 +2,15 @@ import { AppService } from './app.service';
 export declare class AppController {
     private readonly appService;
     constructor(appService: AppService);
-    root(): {
+    renderMarker(): {
         key: string;
     };
+    renderMarkers(): {
+        key: string;
+    };
+    getAll(): {
+        lat: number;
+        lng: number;
+    }[];
+    getFiltered(distance: string): void;
 }
