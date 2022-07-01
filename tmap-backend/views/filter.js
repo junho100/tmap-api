@@ -2,7 +2,7 @@ function initTmap() {
   const map = new Tmapv2.Map('map_div', {
     center: new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
     width: '890px',
-    height: '400px',
+    height: '350px',
     zoom: 15,
   });
   var center = new Tmapv2.Marker({
@@ -25,10 +25,14 @@ function initTmap() {
 }
 
 function initTmapFilter(distance) {
-  const map = new Tmapv2.Map('map_div', {
+  const filterDiv = document.getElementById('map_div_filter');
+  while (filterDiv.hasChildNodes()) {
+    filterDiv.removeChild(filterDiv.firstChild);
+  }
+  const map = new Tmapv2.Map('map_div_filter', {
     center: new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
     width: '890px',
-    height: '400px',
+    height: '350px',
     zoom: 15,
   });
   var center = new Tmapv2.Marker({
