@@ -18,12 +18,31 @@
       res.data.forEach((element) => { const lat = parseFloat(element.lat); const
       lng = parseFloat(element.lng); console.log(lat, lng); const marker = new
       Tmapv2.Marker({ position: new Tmapv2.LatLng(lat, lng), map: map, }); });
+      }); } function initTmapFilter(distance) { const map = new
+      Tmapv2.Map('map_div', { center: new Tmapv2.LatLng(37.566481622437934,
+      126.98502302169841), width: '890px', height: '400px', zoom: 15, }); var
+      center = new Tmapv2.Marker({ position: new
+      Tmapv2.LatLng(37.566481622437934, 126.98502302169841), icon:
+      'http://tmapapi.sktelecom.com/resources/images/common/pin_car.png', map:
+      map, zoom: 5, });
+      axios.get(`http://localhost:3000/all/${distance}`).then((res) => {
+      res.data.forEach((element) => { const lat = parseFloat(element.lat); const
+      lng = parseFloat(element.lng); console.log(lat, lng); const marker = new
+      Tmapv2.Marker({ position: new Tmapv2.LatLng(lat, lng), map: map, }); });
       }); }
 
     </script>
   </head>
   <body onload='initTmap()'>
-    <div id='map_div'>
+    <div style='display: flex; flex-direction : column; align-items : center;'>
+      <div id='map_div'>
+      </div>
+      <p>tmap with 100 marks</p>
+      <div>
+        <button onclick='initTmapFilter(100)'>100M</button>
+        <button onclick='initTmapFilter(200)'>200M</button>
+        <button onclick='initTmapFilter(300)'>300M</button>
+      </div>
     </div>
   </body>
 </html>

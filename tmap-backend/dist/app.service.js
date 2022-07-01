@@ -12,6 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
+function getDistanceFromLatLonInKm(lat1, lng1, lat2, lng2) {
+    function deg2rad(deg) {
+        return deg * (Math.PI / 180);
+    }
+    const R = 6371;
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+            Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
+    return d;
+}
 let AppService = class AppService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -20,14 +36,25 @@ let AppService = class AppService {
             lng: 126.98502302169841,
         };
         this.markers = [];
-        for (let i = 0; i < 100; i++) {
-            const lat = Math.random() / 100 + 37.56368;
-            const lng = Math.random() / 100 + 126.976433;
-            const marker = {
-                lat,
-                lng,
-            };
-            this.markers.push(marker);
+        for (let i = 1; i < 101; i++) {
+            if (i % 2 == 0) {
+                const lat = 37.56368 + Math.random() / 100;
+                const lng = 126.976433 + Math.random() / 100;
+                const marker = {
+                    lat,
+                    lng,
+                };
+                this.markers.push(marker);
+            }
+            else {
+                const lat = 37.56368 - Math.random() / 100;
+                const lng = 126.976433 - Math.random() / 100;
+                const marker = {
+                    lat,
+                    lng,
+                };
+                this.markers.push(marker);
+            }
         }
     }
     renderMarker() {
@@ -39,22 +66,15 @@ let AppService = class AppService {
     getAll() {
         return this.markers;
     }
-    getFiltered(distance) {
+    async getFiltered(distance) {
         const newMarkers = [];
         for (let i = 0; i < 100; i++) {
-            const d = this.httpService.get('"https://apis.openapi.sk.com/tmap/routes/distance?version=1&format=json&callback=result', {
-                data: {
-                    appKey: process.env.API_KEY,
-                    startX: String(this.center.lat),
-                    startY: String(this.center.lng),
-                    endX: String(this.markers[i].lat),
-                    endY: String(this.markers[i].lng),
-                    reqCoordType: 'WGS84GEO',
-                },
-            });
-            console.log(JSON.stringify(d));
+            const dis = getDistanceFromLatLonInKm(this.center.lat, this.center.lng, this.markers[i].lat, this.markers[i].lng) * 1000;
+            if (dis <= distance) {
+                newMarkers.push(this.markers[i]);
+            }
         }
-        return;
+        return newMarkers;
     }
 };
 AppService = __decorate([

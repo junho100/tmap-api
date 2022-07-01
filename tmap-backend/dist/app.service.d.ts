@@ -15,6 +15,6 @@ export declare class AppService {
         key: string;
     };
     getAll(): markerType[];
-    getFiltered(distance: number): void;
+    getFiltered(distance: number): Promise<any[]>;
 }
 export {};

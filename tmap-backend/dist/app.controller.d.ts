@@ -12,5 +12,5 @@ export declare class AppController {
         lat: number;
         lng: number;
     }[];
-    getFiltered(distance: string): void;
+    getFiltered(distance: string): Promise<any[]>;
 }
