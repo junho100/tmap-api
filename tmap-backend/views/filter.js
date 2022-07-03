@@ -23,7 +23,6 @@ function initTmap() {
     });
   });
 }
-
 function initTmapFilter(distance) {
   const filterDiv = document.getElementById('map_div_filter');
   while (filterDiv.hasChildNodes()) {
@@ -41,7 +40,7 @@ function initTmapFilter(distance) {
     map: map,
     zoom: 5,
   });
-  axios.get(`http://localhost:3000/all/${distance}`).then((res) => {
+  axios.get(`http://localhost:3000/ped/${distance}`).then((res) => {
     res.data.forEach((element) => {
       const lat = parseFloat(element.lat);
       const lng = parseFloat(element.lng);

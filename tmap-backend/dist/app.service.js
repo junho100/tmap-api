@@ -12,7 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
-function getDistanceFromLatLonInKm(lat1, lng1, lat2, lng2) {
+const rxjs_1 = require("rxjs");
+function sleep(delay) {
+    const start = new Date().getTime();
+    while (new Date().getTime() < start + delay)
+        ;
+}
+function getDistance(lat1, lng1, lat2, lng2) {
     function deg2rad(deg) {
         return deg * (Math.PI / 180);
     }
@@ -54,7 +60,40 @@ let AppService = class AppService {
                     lng,
                 };
                 this.markers.push(marker);
+                if (i === 1) {
+                    console.log(marker);
+                }
             }
+        }
+    }
+    async getPedDistance(lat1, lng1, lat2, lng2) {
+        const distanceOb = this.httpService.post('https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1', {
+            angle: 0,
+            speed: 0,
+            reqCoordType: 'WGS84GEO',
+            searchOption: '0',
+            resCoordType: 'WGS84GEO',
+            sort: 'index',
+            startX: lng1,
+            startY: lat1,
+            endX: lng2,
+            endY: lat2,
+            startName: 'home',
+            endName: 'taget',
+        }, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                appKey: process.env.API_KEY,
+            },
+        });
+        try {
+            const res = await (0, rxjs_1.firstValueFrom)(distanceOb);
+            return parseInt(res.data.features[0].properties.totalDistance);
+        }
+        catch (e) {
+            console.log(e);
+            return 100000;
         }
     }
     renderMarker() {
@@ -66,15 +105,50 @@ let AppService = class AppService {
     getAll() {
         return this.markers;
     }
-    async getFiltered(distance) {
+    getFiltered(distance) {
         const newMarkers = [];
         for (let i = 0; i < 100; i++) {
-            const dis = getDistanceFromLatLonInKm(this.center.lat, this.center.lng, this.markers[i].lat, this.markers[i].lng) * 1000;
+            const dis = getDistance(this.center.lat, this.center.lng, this.markers[i].lat, this.markers[i].lng) * 1000;
             if (dis <= distance) {
                 newMarkers.push(this.markers[i]);
             }
         }
         return newMarkers;
+    }
+    async getPedFiltered(distance) {
+        const newMarkers = [];
+        for (let i = 0; i < 100; i++) {
+            if ((i + 1) % 3 === 0) {
+                sleep(2000);
+            }
+            const dis = await this.getPedDistance(this.center.lat, this.center.lng, this.markers[i].lat, this.markers[i].lng);
+            if (dis <= distance) {
+                newMarkers.push(this.markers[i]);
+            }
+        }
+        return newMarkers;
+    }
+    testCode() {
+        return this.httpService.post('https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1', {
+            angle: 0,
+            speed: 0,
+            reqCoordType: 'WGS84GEO',
+            searchOption: '0',
+            resCoordType: 'WGS84GEO',
+            sort: 'index',
+            startX: 126.98502302169841,
+            startY: 37.566481622437934,
+            endX: 126.97375839798819,
+            endY: 37.55535311812612,
+            startName: 'home',
+            endName: 'test',
+        }, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                appKey: process.env.API_KEY,
+            },
+        });
     }
 };
 AppService = __decorate([

@@ -27,7 +27,7 @@
       new Tmapv2.LatLng(37.566481622437934, 126.98502302169841), icon:
       'http://tmapapi.sktelecom.com/resources/images/common/pin_car.png', map:
       map, zoom: 5, });
-      axios.get(`http://localhost:3000/all/${distance}`).then((res) => {
+      axios.get(`http://localhost:3000/ped/${distance}`).then((res) => {
       res.data.forEach((element) => { const lat = parseFloat(element.lat); const
       lng = parseFloat(element.lng); console.log(lat, lng); const marker = new
       Tmapv2.Marker({ position: new Tmapv2.LatLng(lat, lng), map: map, }); });

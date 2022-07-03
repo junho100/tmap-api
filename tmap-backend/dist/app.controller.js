@@ -31,6 +31,24 @@ let AppController = class AppController {
     getFiltered(distance) {
         return this.appService.getFiltered(parseInt(distance));
     }
+    getPedFiltered(distance) {
+        return this.appService.getPedFiltered(parseInt(distance));
+    }
+    testCode() {
+        const results = this.appService.testCode();
+        results.forEach((res) => {
+            const rs = res.data.features;
+            rs.forEach((r) => {
+                if (r.properties.totalDistance) {
+                    console.log(r.properties.totalDistance);
+                }
+                else {
+                    return false;
+                }
+            });
+        });
+        return;
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -59,6 +77,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getFiltered", null);
+__decorate([
+    (0, common_1.Get)('/ped/:distance'),
+    __param(0, (0, common_1.Param)('distance')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "getPedFiltered", null);
+__decorate([
+    (0, common_1.Get)('/test'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "testCode", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
