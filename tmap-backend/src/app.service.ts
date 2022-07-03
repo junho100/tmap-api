@@ -70,6 +70,7 @@ export class AppService {
     );
     try {
       const res = await firstValueFrom(distanceOb);
+      console.log(res.data.features[0].properties.totalDistance);
       return parseInt(res.data.features[0].properties.totalDistance);
     } catch (e) {
       console.log(e);

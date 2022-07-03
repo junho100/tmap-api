@@ -89,6 +89,7 @@ let AppService = class AppService {
         });
         try {
             const res = await (0, rxjs_1.firstValueFrom)(distanceOb);
+            console.log(res.data.features[0].properties.totalDistance);
             return parseInt(res.data.features[0].properties.totalDistance);
         }
         catch (e) {
