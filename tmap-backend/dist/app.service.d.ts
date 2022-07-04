@@ -12,12 +12,8 @@ export declare class AppService {
     renderMarker(): {
         key: string;
     };
-    renderMarkers(): {
-        key: string;
-    };
     getAll(): markerType[];
     getFiltered(distance: number): any[];
     getPedFiltered(distance: number): Promise<any[]>;
-    testCode(): import("rxjs").Observable<import("axios").AxiosResponse<any, any>>;
 }
 export {};

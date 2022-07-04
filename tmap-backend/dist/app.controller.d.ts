@@ -8,11 +8,13 @@ export declare class AppController {
     renderMarkers(): {
         key: string;
     };
+    renderPedMarkers(): {
+        key: string;
+    };
     getAll(): {
         lat: number;
         lng: number;
     }[];
     getFiltered(distance: string): any[];
     getPedFiltered(distance: string): Promise<any[]>;
-    testCode(): void;
 }

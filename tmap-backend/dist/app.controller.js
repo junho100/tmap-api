@@ -23,7 +23,10 @@ let AppController = class AppController {
         return this.appService.renderMarker();
     }
     renderMarkers() {
-        return this.appService.renderMarkers();
+        return this.appService.renderMarker();
+    }
+    renderPedMarkers() {
+        return this.appService.renderMarker();
     }
     getAll() {
         return this.appService.getAll();
@@ -34,21 +37,6 @@ let AppController = class AppController {
     getPedFiltered(distance) {
         return this.appService.getPedFiltered(parseInt(distance));
     }
-    testCode() {
-        const results = this.appService.testCode();
-        results.forEach((res) => {
-            const rs = res.data.features;
-            rs.forEach((r) => {
-                if (r.properties.totalDistance) {
-                    console.log(r.properties.totalDistance);
-                }
-                else {
-                    return false;
-                }
-            });
-        });
-        return;
-    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -58,12 +46,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "renderMarker", null);
 __decorate([
-    (0, common_1.Get)('/filter'),
-    (0, common_1.Render)('filter'),
+    (0, common_1.Get)('/straight'),
+    (0, common_1.Render)('straight'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "renderMarkers", null);
+__decorate([
+    (0, common_1.Get)('/ped'),
+    (0, common_1.Render)('ped'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "renderPedMarkers", null);
 __decorate([
     (0, common_1.Get)('/all'),
     __metadata("design:type", Function),
@@ -71,7 +66,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getAll", null);
 __decorate([
-    (0, common_1.Get)('/all/:distance'),
+    (0, common_1.Get)('/straight/:distance'),
     __param(0, (0, common_1.Param)('distance')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -84,12 +79,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getPedFiltered", null);
-__decorate([
-    (0, common_1.Get)('/test'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AppController.prototype, "testCode", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])

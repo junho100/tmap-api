@@ -13,15 +13,10 @@ exports.AppService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const rxjs_1 = require("rxjs");
-function sleep(delay) {
-    const start = new Date().getTime();
-    while (new Date().getTime() < start + delay)
-        ;
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
 }
 function getDistance(lat1, lng1, lat2, lng2) {
-    function deg2rad(deg) {
-        return deg * (Math.PI / 180);
-    }
     const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lng2 - lng1);
@@ -60,9 +55,6 @@ let AppService = class AppService {
                     lng,
                 };
                 this.markers.push(marker);
-                if (i === 1) {
-                    console.log(marker);
-                }
             }
         }
     }
@@ -93,14 +85,10 @@ let AppService = class AppService {
             return parseInt(res.data.features[0].properties.totalDistance);
         }
         catch (e) {
-            console.log(e);
             return 100000;
         }
     }
     renderMarker() {
-        return { key: process.env.API_KEY };
-    }
-    renderMarkers() {
         return { key: process.env.API_KEY };
     }
     getAll() {
@@ -119,37 +107,12 @@ let AppService = class AppService {
     async getPedFiltered(distance) {
         const newMarkers = [];
         for (let i = 0; i < 100; i++) {
-            if ((i + 1) % 3 === 0) {
-                sleep(2000);
-            }
             const dis = await this.getPedDistance(this.center.lat, this.center.lng, this.markers[i].lat, this.markers[i].lng);
             if (dis <= distance) {
                 newMarkers.push(this.markers[i]);
             }
         }
         return newMarkers;
-    }
-    testCode() {
-        return this.httpService.post('https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1', {
-            angle: 0,
-            speed: 0,
-            reqCoordType: 'WGS84GEO',
-            searchOption: '0',
-            resCoordType: 'WGS84GEO',
-            sort: 'index',
-            startX: 126.98502302169841,
-            startY: 37.566481622437934,
-            endX: 126.97375839798819,
-            endY: 37.55535311812612,
-            startName: 'home',
-            endName: 'test',
-        }, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                appKey: process.env.API_KEY,
-            },
-        });
     }
 };
 AppService = __decorate([

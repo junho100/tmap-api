@@ -11,10 +11,16 @@ export class AppController {
     return this.appService.renderMarker();
   }
 
-  @Get('/filter')
-  @Render('filter')
+  @Get('/straight')
+  @Render('straight')
   renderMarkers() {
-    return this.appService.renderMarkers();
+    return this.appService.renderMarker();
+  }
+
+  @Get('/ped')
+  @Render('ped')
+  renderPedMarkers() {
+    return this.appService.renderMarker();
   }
 
   @Get('/all')
@@ -22,7 +28,7 @@ export class AppController {
     return this.appService.getAll();
   }
 
-  @Get('/all/:distance')
+  @Get('/straight/:distance')
   getFiltered(@Param('distance') distance: string) {
     return this.appService.getFiltered(parseInt(distance));
   }
@@ -30,21 +36,5 @@ export class AppController {
   @Get('/ped/:distance')
   getPedFiltered(@Param('distance') distance: string) {
     return this.appService.getPedFiltered(parseInt(distance));
-  }
-
-  @Get('/test')
-  testCode() {
-    const results = this.appService.testCode();
-    results.forEach((res) => {
-      const rs = res.data.features;
-      rs.forEach((r) => {
-        if (r.properties.totalDistance) {
-          console.log(r.properties.totalDistance);
-        } else {
-          return false;
-        }
-      });
-    });
-    return;
   }
 }
